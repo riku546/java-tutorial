@@ -2,17 +2,19 @@ import java.util.Scanner;
 
 public class Sanmoku {
     static int[][] board = {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}};
-    static int turn = 1;
+    static int turn = 2;
 
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        print_board();
+        print_turn();
 
-        for (int i = 0; i < 3; i++) {
-            print_board();
-            print_turn();
+        for (int i = 0; i < 9; i++) {
             int[] input_nums = input_num(scanner);
             board[input_nums[0]][input_nums[1]] = turn;
+            print_board();
+            print_turn();
         }
 
         scanner.close();
@@ -33,7 +35,7 @@ public class Sanmoku {
 
                 } else if (board[i][x] != 0) {
                     System.out.print("| ");
-                    System.out.print(turn + " ");
+                    System.out.print(board[i][x] + " ");
                     if (x == 2) {
                         System.out.print("|");
                     }
@@ -46,6 +48,7 @@ public class Sanmoku {
 
 
         System.out.println("-------------");
+        turn = 3 - turn;
 
 
 
@@ -62,7 +65,7 @@ public class Sanmoku {
         int col = scanner.nextInt();
         nums[0] = row - 1;
         nums[1] = col - 1;
-        
+
         return nums;
     }
 
