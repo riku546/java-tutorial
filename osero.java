@@ -30,11 +30,10 @@ public class osero {
     public static void main(String... args) {
         display_board();
         Scanner scanner = new Scanner(System.in);
-        int i = 0;
 
-        while (i < 1) {
+        while (!check_finished()) {
             System.out.println("turn:" + turn);
-            System.out.println("配置するマスの座標を入力してください（例:0 0）");
+            System.out.println("配置するマスの座標を入力してください（例:1 1）");
             int row_index = scanner.nextInt() - 1;
             int cell_index = scanner.nextInt() - 1;
             if (row_index > 7 || row_index < 0 || cell_index > 7 || cell_index < 0
@@ -44,15 +43,25 @@ public class osero {
                 continue;
             }
             put_cell_on_board(row_index, cell_index);
+            flip_cell_on_board(row_index, cell_index);
             display_board();
 
             turn = 3 - turn;
-            i++;
         }
-        flip_cell_on_board();
 
         System.out.println("fin");
         scanner.close();
+    }
+
+    public static boolean check_finished(){
+        for(int i = 0; i < board.length ; i++){
+            for(int x = 0; x < board.length; x++){
+                if(board[i][x] == 0) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     public static void display_board() {
@@ -75,25 +84,59 @@ public class osero {
 
     }
 
-    public static void flip_cell_on_board() {
-        for (int i = 0; i < board.length; i++) {
-            for (int x = 0; x < board.length; x++) {
-                if (board[i][x] == 0) {
-                    for (int y = 0; y < directions.length; y++) {
-                        int row = i + directions[y][1];
-                        int cell = x + directions[y][0];
-                        if (row > 7 || row < 0 || cell > 7 || cell < 0) {
-                            break;
-
-                        }
-                        
-                        if(board[i][x] !=turn){
-                            
-                        }
-                    }
-                }
+    public static void flip_cell_on_board(int row_index, int cell_index) {
+        for (int i = 0; i < directions.length; i++) {
+            int extension_cell = cell_index + directions[i][1];
+            int extension_row = row_index + directions[i][0];
+            if (extension_cell > 7 || extension_cell < 0 || extension_row < 0 || extension_row > 7) {
+                continue;
             }
+            if (board[extension_row][extension_cell] == 3 - turn) {
+                extend_fliping_cell(i, extension_cell, extension_row, row_index, cell_index);
+            } else {
+                continue;
+            }
+
         }
     }
+
+    public static void extend_fliping_cell(int i, int extension_cell, int extension_row, int row_index,
+            int cell_index) {
+
+        int count = 1;
+        while (true) {
+
+            extension_row += directions[i][0];
+            extension_cell += directions[i][1];
+            if (extension_cell > 7 || extension_cell < 0 || extension_row < 0 || extension_row > 7) {
+                continue;
+            }
+
+            if (board[extension_row][extension_cell] == 0) {
+                break;
+            }
+
+            if (board[extension_row][extension_cell] == turn) {
+                for (int s = 0; s < count; s++) {
+                    cell_index += directions[i][1];
+                    row_index += directions[i][0];
+
+
+                    board[row_index][cell_index] = turn;
+
+                }
+                return;
+            }
+
+            if (extension_cell == 7 || extension_cell == 0 || extension_row == 0 || extension_row == 7) {
+                break;
+            }
+
+            count++;
+
+        }
+
+    }
+
 
 }
