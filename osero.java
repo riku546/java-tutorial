@@ -32,7 +32,7 @@ public class osero {
         Scanner scanner = new Scanner(System.in);
 
         while (!check_finished()) {
-            System.out.println("turn:" + turn);
+            System.out.println("turn:" + (turn == 1 ? "⚫️" : "⚪️"));
             System.out.println("配置するマスの座標を入力してください（例:1 1）");
             int row_index = scanner.nextInt() - 1;
             int cell_index = scanner.nextInt() - 1;
@@ -53,10 +53,10 @@ public class osero {
         scanner.close();
     }
 
-    public static boolean check_finished(){
-        for(int i = 0; i < board.length ; i++){
-            for(int x = 0; x < board.length; x++){
-                if(board[i][x] == 0) {
+    public static boolean check_finished() {
+        for (int i = 0; i < board.length; i++) {
+            for (int x = 0; x < board.length; x++) {
+                if (board[i][x] == 0) {
                     return false;
                 }
             }
@@ -65,18 +65,29 @@ public class osero {
     }
 
     public static void display_board() {
+        System.out.println("─────────────────────────────────────────────────");
         for (short i = 0; i < board.length; i++) {
             for (short x = 0; x < board.length; x++) {
-                System.out.print("| ");
+                System.out.print("┃  ");
                 if (board[i][x] == 0) {
-                    System.out.print("- ");
+                    System.out.print("-  ");
+                } else if (board[i][x] == 1) {
+                    System.out.print("⚫️" + " ");
                 } else {
-                    System.out.print(board[i][x] + " ");
+                    System.out.print("⚪️" + " ");
+
                 }
             }
-            System.out.print("|");
+            System.out.print("┃");
+            System.out.println();
+            for (short y = 0; y < board.length; y++) {
+                System.out.print("┃     ");
+            }
+            System.out.print("┃");
             System.out.println();
         }
+        System.out.println("─────────────────────────────────────────────────");
+
     }
 
     public static void put_cell_on_board(int row_index, int cell_index) {
@@ -121,7 +132,6 @@ public class osero {
                     cell_index += directions[i][1];
                     row_index += directions[i][0];
 
-
                     board[row_index][cell_index] = turn;
 
                 }
@@ -137,6 +147,5 @@ public class osero {
         }
 
     }
-
 
 }
