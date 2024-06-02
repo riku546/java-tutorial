@@ -47,6 +47,7 @@ public class Main {
         int input_row = scanner.nextInt();
         int input_cell = scanner.nextInt();
         put_bomb(input_row, input_cell);
+        count_bomb();
         display_board();
 
         scanner.close();
@@ -54,20 +55,20 @@ public class Main {
 
     public static void display_board() {
         System.out.println("───────────────────────────────────────────────────────");
-        for (short i = 0; i < User_inputs.length; i++) {
-            for (short x = 0; x < User_inputs.length; x++) {
+        for (short i = 0; i < Bomb_board.length; i++) {
+            for (short x = 0; x < Bomb_board.length; x++) {
                 System.out.print("┃  ");
-                if (User_inputs[i][x] == 0) {
+                if (Bomb_board[i][x] == 0) {
                     System.out.print("-  ");
-                } else if (User_inputs[i][x] == 11) {
+                } else if (Bomb_board[i][x] == 11) {
                     System.out.print("💣️ ");
                 } else {
-                    System.out.print(User_inputs[i][x] + "  ");
+                    System.out.print(Bomb_board[i][x] + "  ");
                 }
             }
             System.out.print("┃");
             System.out.println();
-            for (short y = 0; y < User_inputs.length; y++) {
+            for (short y = 0; y < Bomb_board.length; y++) {
                 System.out.print("┃     ");
             }
             System.out.print("┃");
@@ -95,7 +96,25 @@ public class Main {
     }
 
     public static void count_bomb() {
+        for(int row_index = 0; row_index < Bomb_board.length; row_index++){
+            for(int cell_index = 0; cell_index < Bomb_board.length; cell_index++){
+                int count = 0;
+                if(Bomb_board[row_index][cell_index] == 0){
+                    for(int y = 0; y < directions.length; y++){
+                        int di_row_index = row_index + directions[y][1];
+                        int di_cell_index = cell_index + directions[y][0];
 
+                        if(di_cell_index > 8 || di_cell_index < 0 || di_row_index > 8 || di_row_index < 0 )continue;
+
+                        if(Bomb_board[di_row_index][di_cell_index] == 11){
+                            count++;
+                        }
+
+                    }
+                    Bomb_board[row_index][cell_index] = count;
+                }
+            }
+        }
     }
 
 }
