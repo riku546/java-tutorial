@@ -131,8 +131,10 @@ public class Main {
 
         if (Bomb_board[input_row][input_cell] == 0) {
             chain_open_empty_cell(input_row, input_cell);
+            chain_open_number_cell();
 
         } else if (Bomb_board[input_row][input_cell] == 11) {
+            System.out.println("GameOver");
 
         } else {
 
@@ -154,6 +156,26 @@ public class Main {
             }
 
         }
+    }
+
+    public static void chain_open_number_cell(){
+        for(int i= 0; i < Bomb_board.length; i++){
+            for(int x= 0; x < Bomb_board.length; x++){
+                if(Bomb_board[i][x] >  0 && Bomb_board[i][x] < 11  ){
+                    for(int y = 0; y < directions.length; y++){
+                        int di_i = i + directions[y][1];
+                        int di_x = x + directions[y][0];
+                        if (di_i > 8 || di_i < 0 || di_x > 8 || di_x < 0)
+                        continue;
+
+                        if(User_inputs[di_i][di_x] == 0){
+                            User_inputs[i][x] = Bomb_board[i][x];
+                        }
+                    }
+                }
+            }    
+        }
+        
     }
 
 }
