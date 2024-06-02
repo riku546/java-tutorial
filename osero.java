@@ -119,13 +119,11 @@ public class osero {
 
             extension_row += directions[i][0];
             extension_cell += directions[i][1];
-            if (extension_cell > 7 || extension_cell < 0 || extension_row < 0 || extension_row > 7) {
-                continue;
+            if (extension_cell > 7 || extension_cell < 0 || extension_row < 0 || extension_row > 7 || board[extension_row][extension_cell] == 0) {
+                return;
             }
 
-            if (board[extension_row][extension_cell] == 0) {
-                break;
-            }
+
 
             if (board[extension_row][extension_cell] == turn) {
                 for (int s = 0; s < count; s++) {
@@ -138,9 +136,7 @@ public class osero {
                 return;
             }
 
-            if (extension_cell == 7 || extension_cell == 0 || extension_row == 0 || extension_row == 7) {
-                break;
-            }
+
 
             count++;
 
