@@ -45,7 +45,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         display_board();
 
-        for (int i = 0; i < 30; i++) {
+        while (is_clear() != 10) {
 
             int input_row = scanner.nextInt() - 1;
             int input_cell = scanner.nextInt() - 1;
@@ -55,11 +55,43 @@ public class Main {
                 count_bomb();
                 is_first_click = false;
             }
-            open_cell(input_row, input_cell);
+
+            if (open_cell(input_row, input_cell)) {
+                System.out.println("GameOver");
+                open_bomb_cell();
+                display_board();
+                scanner.close();
+                return;
+            }
 
             display_board();
+
         }
+        System.out.println("Clear");
         scanner.close();
+    }
+
+    public static void open_bomb_cell(){
+        for (int i = 0; i < User_inputs.length; i++) {
+            for (int x = 0; x < User_inputs.length; x++) {
+                if (Bomb_board[i][x] == 11) {
+                    User_inputs[i][x] = 11;
+                }
+            }
+        }
+
+    }
+
+    public static int is_clear() {
+        int count = 0;
+        for (int i = 0; i < User_inputs.length; i++) {
+            for (int x = 0; x < User_inputs.length; x++) {
+                if (User_inputs[i][x] == -1) {
+                    count++;
+                }
+            }
+        }
+        return count;
     }
 
     public static void display_board() {
@@ -127,19 +159,20 @@ public class Main {
         }
     }
 
-    public static void open_cell(int input_row, int input_cell) {
+    public static boolean open_cell(int input_row, int input_cell) {
 
         if (Bomb_board[input_row][input_cell] == 0) {
             chain_open_empty_cell(input_row, input_cell);
             chain_open_number_cell();
 
         } else if (Bomb_board[input_row][input_cell] == 11) {
-            System.out.println("GameOver");
+            return true;
 
         } else {
 
             User_inputs[input_row][input_cell] = Bomb_board[input_row][input_cell];
         }
+        return false;
 
     }
 
@@ -158,24 +191,24 @@ public class Main {
         }
     }
 
-    public static void chain_open_number_cell(){
-        for(int i= 0; i < Bomb_board.length; i++){
-            for(int x= 0; x < Bomb_board.length; x++){
-                if(Bomb_board[i][x] >  0 && Bomb_board[i][x] < 11  ){
-                    for(int y = 0; y < directions.length; y++){
+    public static void chain_open_number_cell() {
+        for (int i = 0; i < Bomb_board.length; i++) {
+            for (int x = 0; x < Bomb_board.length; x++) {
+                if (Bomb_board[i][x] > 0 && Bomb_board[i][x] < 11) {
+                    for (int y = 0; y < directions.length; y++) {
                         int di_i = i + directions[y][1];
                         int di_x = x + directions[y][0];
                         if (di_i > 8 || di_i < 0 || di_x > 8 || di_x < 0)
-                        continue;
+                            continue;
 
-                        if(User_inputs[di_i][di_x] == 0){
+                        if (User_inputs[di_i][di_x] == 0) {
                             User_inputs[i][x] = Bomb_board[i][x];
                         }
                     }
                 }
-            }    
+            }
         }
-        
+
     }
 
 }
